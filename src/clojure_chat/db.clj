@@ -1,6 +1,7 @@
 (ns clojure-chat.db
   (:refer-clojure :exclude [sort find])
-  (:require [monger.core :as mg]
+  (:require [environ.core :refer [env]]
+            [monger.core :as mg]
             [monger.collection :as mc]
             [monger.query :refer :all]
             [monger.operators :refer :all]))
@@ -8,8 +9,8 @@
 (def coll "messages")
 
 (defn- initialize-database []
-  (let [conn (mg/connect)
-        db (mg/get-db conn "clojure-chat")]
+  (let [mongodb-uri (get env :mongodb-uri "mongodb://localhost/clojure-chat")
+        {:keys [db]} (mg/connect-via-uri mongodb-uri)]
     (mc/ensure-index db coll (array-map :time -1 :type 1))
     db))
 

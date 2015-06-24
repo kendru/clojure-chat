@@ -1,5 +1,6 @@
 (ns clojure-chat.messages
   (:require [org.httpkit.server :as http]
+            [environ.core :refer [env]]
             [langohr.core :as rmq]
             [langohr.channel :as lch]
             [langohr.queue :as lq]
@@ -14,10 +15,15 @@
 (def connected-ids (atom []))
 
 (defn- initialize-rmq []
-  (let [conn (rmq/connect)
-        ch (lch/open conn)]
-    (le/declare ch exchange-name "fanout" {:durable false :auto-delete false})
-    ch))
+  (try
+    (let [conn (rmq/connect {:uri (get env :rabbitmq-uri
+                                       "amqp://localhost:5672/%2f")})
+          ch (lch/open conn)]
+      (le/declare ch exchange-name "fanout" {:durable false :auto-delete false})
+      ch)
+    (catch Exception e
+      (println "Error connecting to rabbitmq")
+      (.printStackTrace e))))
 
 (def rmq-channel (delay (initialize-rmq)))
 
