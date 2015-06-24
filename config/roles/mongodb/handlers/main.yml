@@ -1,0 +1,6 @@
+---
+# config/roles/mongodb/vars/main.yml
+# MongoDB service handlers
+
+- name: restart mongod
+  service: name=mongod state=restarted

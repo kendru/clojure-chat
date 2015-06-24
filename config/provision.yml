@@ -1,0 +1,31 @@
+---
+# config/provision.yml
+# Provision development environment
+
+- name: apply common configuration
+  hosts: all
+  sudo: yes
+  roles:
+    - common
+
+- name: set up app server
+  hosts:
+    - application
+  sudo: yes
+  roles:
+    - java
+    - lein
+
+- name: Set up database server
+  hosts:
+    - database
+  sudo: yes
+  roles:
+    - mongodb
+
+- name: Set up messaging broker server
+  hosts:
+    - broker
+  sudo: yes
+  roles:
+    - rabbitmq

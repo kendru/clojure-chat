@@ -1,0 +1,39 @@
+# config/roles/mongodb/tasks/main.yml
+# Install and configure MongoDB
+
+- name: Fetch apt signing key
+  apt_key: keyserver=keyserver.ubuntu.com id=7F0CEB10 state=present
+
+- name: Add 10gen Mongo repo
+  apt_repository: >
+    repo='deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse'
+    state=present
+
+- name: Update apt cache
+  apt: update_cache=yes
+
+- name: Install MongoDB
+  apt: name=mongodb-org state=latest
+
+- name: Start mongod
+  service: name=mongod state=started
+
+- name: Bind mongo to IP
+  lineinfile: dest=/etc/mongod.conf regexp="^bind_ip =" line="bind_ip = {{ mongo_bind_ip }}"
+  notify:
+    - restart mongod
+
+- name: Install pip (for adding mongo user)
+  apt: name=python-pip state=latest
+
+- name: Install pymongo (for adding mongo user)
+  pip: name=pymongo state=latest
+
+# Note that with_items can loop over a variable that contains a list
+- name: Add mongo users
+  mongodb_user: >
+    database={{ item.db }}
+    name={{ item.user }}
+    password={{ item.password }}
+    state=present
+  with_items: mongo_users

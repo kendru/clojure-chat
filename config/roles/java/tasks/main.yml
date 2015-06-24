@@ -1,0 +1,18 @@
+---
+# config/roles/java/tasks/main.yml
+# Install Oracle Java 8
+
+- name: Add WebUpd8 apt repo
+  apt_repository: repo='ppa:webupd8team/java'
+
+- name: Accept Java license
+  debconf: name=oracle-java8-installer question='shared/accepted-oracle-license-v1-1' value=true vtype=select
+
+- name: Update apt cache
+  apt: update_cache=yes
+
+- name: Install Java 8
+  apt: name=oracle-java8-installer state=latest
+
+- name: Set Java environment variables
+  apt: name=oracle-java8-set-default state=latest

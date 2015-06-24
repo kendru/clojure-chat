@@ -1,0 +1,9 @@
+---
+# config/roles/mongodb/vars/main.yml
+# MongoDB default variables
+
+mongo_bind_ip: 0.0.0.0
+mongo_users:
+  - db: clojure-chat
+    user: clojure-chat
+    password: abc123

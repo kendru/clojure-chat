@@ -22,4 +22,25 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       vb.memory = "256"
     end
   end
+
+  config.vm.define :app do |app|
+    app.vm.box = "ubuntu/trusty64"
+    app.vm.hostname = "app"
+    app.vm.network :private_network, ip: "10.0.15.12"
+    app.vm.provider "virtualbox" do |vb|
+      vb.memory = "256"
+    end
+  end
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "config/provision.yml"
+
+    ansible.groups = {
+      "web" => ["web"],
+      "application" => ["app"],
+      "database" => ["infr"],
+      "broker" => ["infr"],
+      "common:children" => ["web", "application", "database", "broker"]
+    }
+  end
 end
