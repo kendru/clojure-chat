@@ -29,11 +29,9 @@
 - name: Install pymongo (for adding mongo user)
   pip: name=pymongo state=latest
 
-# Note that with_items can loop over a variable that contains a list
-- name: Add mongo users
+- name: Add mongo user
   mongodb_user: >
-    database={{ item.db }}
-    name={{ item.user }}
-    password={{ item.password }}
+    database={{ mongo_database }}
+    name={{ mongo_user }}
+    password={{ mongo_password }}
     state=present
-  with_items: mongo_users

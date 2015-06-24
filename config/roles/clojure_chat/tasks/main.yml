@@ -1,0 +1,9 @@
+---
+# config/roles/clojure_chat/tasks/main.yml
+# Add application environment variables
+
+- name: Add env variables
+  template: src=app_env.j2 dest=/home/vagrant/.app_env owner=vagrant group=vagrant
+
+- name: Include env variables in vagrant's login shell
+  shell: echo ". /home/vagrant/.app_env" >> /home/vagrant/.bash_profile

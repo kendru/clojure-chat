@@ -29,3 +29,10 @@
   sudo: yes
   roles:
     - rabbitmq
+
+- name: Set up application
+  hosts:
+    - application
+  sudo: yes
+  roles:
+    - clojure_chat

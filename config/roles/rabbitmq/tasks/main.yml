@@ -1,3 +1,30 @@
----
-# TODO
+# config/roles/rabbitmq/tasks/main.yml
+# Install and configure RabbitMQ
 
+- name: Fetch apt signing key
+  apt_key: url=https://www.rabbitmq.com/rabbitmq-signing-key-public.asc state=present
+
+- name: Add RabbitMQ repo
+  apt_repository: >
+    repo='deb http://www.rabbitmq.com/debian/ testing main'
+    state=present
+
+- name: Update apt cache
+  apt: update_cache=yes
+
+- name: Install RabbitMQ
+  apt: name=rabbitmq-server state=latest
+
+- name: Enable rabbitmq-server on boot
+  service: name=rabbitmq-server enabled=yes
+
+- name: Add RabbitMQ users
+  rabbitmq_user: >
+    user={{ rmq_user }}
+    password={{ rmq_password }}
+    vhost={{ rmq_vhost }}
+    configure_priv=.*
+    read_priv=.*
+    write_priv=.*
+    state=present
+  notify: restart rabbitmq-server

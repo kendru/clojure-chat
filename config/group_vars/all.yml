@@ -1,0 +1,17 @@
+---
+# config/group_vars/all.yml
+# Variables common to all groups
+
+backend_port: 3000
+
+database_ip: 10.0.15.10
+broker_ip: 10.0.15.10
+
+mongo_bind_ip: 0.0.0.0
+mongo_database: clojure-chat
+mongo_user: clojure-chat
+mongo_password: s3cr3t
+
+rmq_vhost: /
+rmq_user: clojure-chat
+rmq_password: s3cr3t

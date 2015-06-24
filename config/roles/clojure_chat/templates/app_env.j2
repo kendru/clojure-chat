@@ -1,0 +1,7 @@
+# {{ ansible_managed }}
+
+export HTTP_PORT="{{ backend_port }}"
+# We are including the auth mechanism because Ansible's mongodb_user
+# module creates users with the SCRAM-SHA-1 method by default
+export MONGODB_URI="mongodb://{{ mongo_user }}:{{ mongo_password }}@{{ database_ip }}/{{ mongo_database }}?authMechanism=SCRAM-SHA-1"
+export RABBITMQ_URI="amqp://{{ rmq_user }}:{{ rmq_password }}@{{ broker_ip }}:5672{% if rmq_vhost == '/' %}/%2f{% else %}{{ rmq_vhost }}{% endif %}"

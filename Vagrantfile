@@ -14,21 +14,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
   end
 
-  config.vm.define :web do |web|
-    web.vm.box = "ubuntu/trusty64"
-    web.vm.hostname = "web"
-    web.vm.network :private_network, ip: "10.0.15.11"
-    web.vm.provider "virtualbox" do |vb|
-      vb.memory = "256"
-    end
-  end
-
   config.vm.define :app do |app|
     app.vm.box = "ubuntu/trusty64"
     app.vm.hostname = "app"
     app.vm.network :private_network, ip: "10.0.15.12"
     app.vm.provider "virtualbox" do |vb|
-      vb.memory = "256"
+      vb.memory = "512"
     end
   end
 
@@ -36,11 +27,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     ansible.playbook = "config/provision.yml"
 
     ansible.groups = {
-      "web" => ["web"],
       "application" => ["app"],
       "database" => ["infr"],
       "broker" => ["infr"],
-      "common:children" => ["web", "application", "database", "broker"]
+      "common:children" => ["application", "database", "broker"]
     }
   end
 end

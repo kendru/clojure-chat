@@ -1,0 +1,6 @@
+---
+# config/roles/rabbitmq/vars/main.yml
+# RabbitMQ service handlers
+
+- name: restart rabbitmq-server
+  service: name=rabbitmq-server state=restarted
