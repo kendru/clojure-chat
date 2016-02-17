@@ -19,7 +19,7 @@
   service: name=mongod state=started
 
 - name: Bind mongo to IP
-  lineinfile: dest=/etc/mongod.conf regexp="^bind_ip =" line="bind_ip = {{ mongo_bind_ip }}"
+  lineinfile: "dest=/etc/mongod.conf regexp=\"^  bindIp:\" line=\"  bindIp: {{ mongo_bind_ip }}\""
   notify:
     - restart mongod
 
